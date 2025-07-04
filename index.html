@@ -6,6 +6,7 @@
 <title>Makeupkat - Tienda y Gestión</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
 <style>
+    /* --- ESTILOS GENERALES --- */
     * {
         margin: 0;
         padding: 0;
@@ -43,7 +44,7 @@
         font-size: 0.9rem;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         transition: background-color 0.3s ease, transform 0.2s ease;
-        z-index: 1001;
+        z-index: 1003;
     }
 
     .toggle-btn:hover, .toggle-btn:active {
@@ -57,18 +58,20 @@
         padding: 1rem 0.5rem;
     }
 
+    /* Gestión fija en esquina superior izquierda */
     .gestion-section {
-        display: none;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        width: 350px;
+        max-height: 90vh;
+        overflow-y: auto;
         background: white;
         padding: 1.5rem;
         border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        max-width: 400px;
-        margin: 3rem auto 2rem;
-    }
-
-    .gestion-section.active {
-        display: block;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        z-index: 1002;
+        display: none;
     }
 
     .form-section input {
@@ -150,6 +153,7 @@
         transform: scale(1.05);
     }
 
+    /* TIENDA */
     .productos {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -207,7 +211,7 @@
         transform: scale(1.05);
     }
 
-    /* Carrito fijo en esquina inferior derecha */
+    /* CARRITO fijo en esquina inferior derecha */
     .carrito {
       position: fixed;
       bottom: 1rem;
@@ -313,12 +317,6 @@
             padding: 2rem 1rem;
         }
 
-        .gestion-section {
-            max-width: 400px;
-            margin: 3rem auto 2rem;
-            padding: 2rem;
-        }
-
         .form-section input, .form-section button {
             padding: 0.8rem;
             font-size: 1rem;
@@ -368,24 +366,25 @@
 <button class="toggle-btn" id="toggleBtn">Gestionar Productos</button>
 
 <div class="container">
-    <!-- Gestión -->
-    <div class="gestion-section" id="gestionSection">
-        <h2>Gestión de Productos</h2>
-        <div class="form-section">
-            <input type="text" id="productName" placeholder="Nombre del producto" />
-            <input type="number" id="productPrice" placeholder="Precio (Q)" step="0.01" />
-            <input type="text" id="productImage" placeholder="URL de la imagen" />
-            <button id="addProductBtn">Agregar Producto</button>
-        </div>
-        <div class="product-list" id="productList"></div>
-    </div>
-
     <!-- Tienda -->
     <div class="tienda-section active" id="tiendaSection">
         <div class="productos" id="productGrid"></div>
     </div>
 </div>
 
+<!-- Gestión fija esquina superior izquierda -->
+<div class="gestion-section" id="gestionSection">
+    <h2>Gestión de Productos</h2>
+    <div class="form-section">
+        <input type="text" id="productName" placeholder="Nombre del producto" />
+        <input type="number" id="productPrice" placeholder="Precio (Q)" step="0.01" />
+        <input type="text" id="productImage" placeholder="URL de la imagen" />
+        <button id="addProductBtn">Agregar Producto</button>
+    </div>
+    <div class="product-list" id="productList"></div>
+</div>
+
+<!-- Carrito fijo en esquina inferior derecha -->
 <div class="carrito" id="carrito">
     <h2>Carrito</h2>
     <ul id="listaCarrito"></ul>
@@ -552,14 +551,14 @@
         displayCarrito();
     }
 
-    // Manejo botón gestión con contraseña
+    // Manejo botón Gestión (pide contraseña)
     toggleBtn.addEventListener("click", () => {
         if (gestionSection.style.display === "block") {
             gestionSection.style.display = "none";
             toggleBtn.textContent = "Gestionar Productos";
         } else {
-            const inputPass = prompt("Ingresa la contraseña para gestión:");
-            if (inputPass === password) {
+            const pass = prompt("Ingresa la contraseña para gestionar productos:");
+            if (pass === password) {
                 gestionSection.style.display = "block";
                 displayProductsGestion();
                 toggleBtn.textContent = "Cerrar Gestión";
