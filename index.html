@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makeupkat - Tienda y Gestión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(to right, #ff69b4, #ff85c0);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 1000;
+        }
+
+        .toggle-btn:hover, .toggle-btn:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1rem 0.5rem;
+        }
+
+        .login-section, .gestion-section, .tienda-section {
+            display: none;
+        }
+
+        .login-section.active, .gestion-section.active, .tienda-section.active {
+            display: block;
+        }
+
+        .login-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 90%;
+            margin: 1rem auto;
+            text-align: center;
+        }
+
+        .login-section h2 {
+            font-size: 1.3rem;
+            color: #ff69b4;
+            margin-bottom: 1rem;
+        }
+
+        .login-section input {
+            width: 100%;
+            padding: 0.6rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .login-section button {
+            width: 100%;
+            padding: 0.6rem;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .login-section button:hover, .login-section button:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        .form-section {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 0.6rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .form-section button {
+            width: 100%;
+            padding: 0.6rem;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-section button:hover, .form-section button:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .product-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .product-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-item div {
+            flex-grow: 1;
+        }
+
+        .product-item h3 {
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .product-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .product-item button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .product-item button:hover, .product-item button:active {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+
+        .productos {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        .producto {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .producto:hover, .producto:active {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .producto img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .producto h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .producto p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .producto button {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .producto button:hover, .producto button:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        .carrito {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            max-width: 100%;
+            z-index: 1000;
+        }
+
+        .carrito h2 {
+            font-size: 1.3rem;
+            color: #ff69b4;
+            margin-bottom: 0.5rem;
+        }
+
+        .carrito ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 0.5rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .carrito li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .carrito button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .carrito button:hover, .carrito button:active {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+
+        .carrito p {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .carrito .finalizar-btn {
+            width: 100%;
+            padding: 0.6rem;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .carrito .finalizar-btn:hover, .carrito .finalizar-btn:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: #ff69b4;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #fff0f5;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (min-width: 601px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .login-section {
+                max-width: 400px;
+                margin: 3rem auto;
+                padding: 2rem;
+            }
+
+            .login-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .login-section input, .login-section button {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+
+            .form-section input, .form-section button {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+
+            .product-item {
+                flex-direction: row;
+                align-items: center;
+                text-align: left;
+            }
+
+            .product-item img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .product-item h3 {
+                font-size: 1.2rem;
+            }
+
+            .product-item p, .product-item button {
+                font-size: 1rem;
+            }
+
+            .product-item button {
+                padding: 0.6rem 1.2rem;
+            }
+
+            .productos {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+
+            .producto img {
+                height: 200px;
+            }
+
+            .producto h3 {
+                font-size: 1.3rem;
+            }
+
+            .producto p, .producto button {
+                font-size: 1rem;
+            }
+
+            .producto button {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .carrito {
+                top: 1rem;
+                right: 1rem;
+                max-width: 300px;
+                border-radius: 15px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                padding: 1.5rem;
+            }
+
+            .carrito h2 {
+                font-size: 1.5rem;
+            }
+
+            .carrito li {
+                font-size: 1rem;
+            }
+
+            .carrito button {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .carrito p {
+                font-size: 1.1rem;
+            }
+
+            .carrito .finalizar-btn {
+                font-size: 1rem;
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Makeupkat</h1>
+    </header>
+
+    <button class="toggle-btn" onclick="toggleView()">Ir a Gestión</button>
+
+    <div class="container">
+        <!-- Sección de Login -->
+        <div class="login-section" id="loginSection">
+            <h2>Iniciar Sesión</h2>
+            <input type="password" id="passwordInput" placeholder="Contraseña">
+            <button onclick="checkPassword()">Ingresar</button>
+        </div>
+
+        <!-- Sección de Gestión -->
+        <div class="gestion-section" id="gestionSection">
+            <h2>Gestión de Productos</h2>
+            <div class="form-section">
+                <input type="text" id="productName" placeholder="Nombre del producto">
+                <input type="number" id="productPrice" placeholder="Precio (Q)" step="0.01">
+                <input type="text" id="productImage" placeholder="URL de la imagen">
+                <button onclick="addProduct()">Agregar Producto</button>
+            </div>
+            <div class="product-list" id="productList"></div>
+        </div>
+
+        <!-- Sección de Tienda -->
+        <div class="tienda-section active" id="tiendaSection">
+            <div class="productos" id="productGrid"></div>
+        </div>
+    </div>
+
+    <div class="carrito" id="carrito">
+        <h2>Carrito</h2>
+        <ul id="listaCarrito"></ul>
+        <p>Total: Q<span id="total">0</span></p>
+        <button class="finalizar-btn" onclick="finalizarPedido()">Finalizar pedido</button>
+    </div>
+
+    <footer>
+        <p>© 2025 Makeupkat. Todos los derechos reservados.</p>
+        <p><a href="https://wa.me/50249080900" target="_blank">WhatsApp</a></p>
+    </footer>
+
+    <script>
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            { name: 'Base Líquida', price: 120, image: 'https://via.placeholder.com/200x150' },
+            { name: 'Labial Matte', price: 50, image: 'https://via.placeholder.com/200x150' }
+        ];
+        let carrito = [];
+        const password = 'fabiola123';
+
+        function displayProductsGestion() {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+            products.forEach((product, index) => {
+                const productItem = document.createElement('div');
+                productItem.className = 'product-item';
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <div>
+                        <h3>${product.name}</h3>
+                        <p>Q${parseFloat(product.price).toFixed(2)}</p>
+                    </div>
+                    <button onclick="deleteProduct(${index})">Borrar</button>
+                `;
+                productList.appendChild(productItem);
+            });
+        }
+
+        function displayProductsTienda() {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+            products.forEach((product) => {
+                const producto = document.createElement('div');
+                producto.className = 'producto';
+                producto.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>Q${parseFloat(product.price).toFixed(2)}</p>
+                    <button onclick="agregarAlCarrito('${product.name}', ${product.price})">Agregar al carrito</button>
+                `;
+                productGrid.appendChild(producto);
+            });
+            if (products.length === 0) {
+                productGrid.innerHTML = `
+                    <div class="producto">
+                        <img src="https://via.placeholder.com/200x150" alt="Base líquida">
+                        <h3>Base Líquida</h3>
+                        <p>Q120.00</p>
+                        <button onclick="agregarAlCarrito('Base Líquida', 120)">Agregar al carrito</button>
+                    </div>
+                    <div class="producto">
+                        <img src="https://via.placeholder.com/200x150" alt="Labial matte">
+                        <h3>Labial Matte</h3>
+                        <p>Q50.00</p>
+                        <button onclick="agregarAlCarrito('Labial Matte', 50)">Agregar al carrito</button>
+                    </div>
+                `;
+            }
+        }
+
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const price = document.getElementById('productPrice').value;
+            const image = document.getElementById('productImage').value.trim();
+
+            if (name && price && image) {
+                const parsedPrice = parseFloat(price);
+                if (isNaN(parsedPrice) || parsedPrice <= 0) {
+                    alert('Por favor, ingresa un precio válido mayor a 0.');
+                    return;
+                }
+                products.push({ name, price: parsedPrice, image });
+                localStorage.setItem('products', JSON.stringify(products));
+                displayProductsGestion();
+                displayProductsTienda();
+                document.getElementById('productName').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productImage').value = '';
+                alert('Producto agregado con éxito.');
+            } else {
+                alert('Por favor, completa todos los campos correctamente.');
+            }
+        }
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(products));
+            displayProductsGestion();
+            displayProductsTienda();
+            alert('Producto eliminado con éxito.');
+        }
+
+        function agregarAlCarrito(producto, precio) {
+            carrito.push({ producto, precio: parseFloat(precio) });
+            alert(`Agregado al carrito: ${producto}`);
+            renderizarCarrito();
+        }
+
+        function quitarDelCarrito(index) {
+            carrito.splice(index, 1);
+            renderizarCarrito();
+        }
+
+        function renderizarCarrito() {
+            const lista = document.getElementById('listaCarrito');
+            const totalElem = document.getElementById('total');
+            lista.innerHTML = '';
+            let total = 0;
+            carrito.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${item.producto} - Q${parseFloat(item.precio).toFixed(2)}
+                    <button onclick="quitarDelCarrito(${index})">Quitar</button>
+                `;
+                lista.appendChild(li);
+                total += parseFloat(item.precio);
+            });
+            totalElem.textContent = total.toFixed(2);
+        }
+
+        function finalizarPedido() {
+            const telefono = '50249080900';
+            let mensaje = 'Hola, deseo hacer el siguiente pedido:%0A';
+            carrito.forEach(item => {
+                mensaje += `- ${item.producto}: Q${parseFloat(item.precio).toFixed(2)}%0A`;
+            });
+            const total = carrito.reduce((sum, item) => sum + parseFloat(item.precio), 0);
+            mensaje += `Total: Q${total.toFixed(2)}`;
+            window.open(`https://wa.me/${telefono}?text=${mensaje}`, '_blank');
+        }
+
+        function showLogin() {
+            document.getElementById('loginSection').classList.add('active');
+            document.getElementById('gestionSection').classList.remove('active');
+            document.getElementById('tiendaSection').classList.remove('active');
+            document.querySelector('.toggle-btn').textContent = 'Volver a Tienda';
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === password) {
+                document.getElementById('loginSection').classList.remove('active');
+                document.getElementById('gestionSection').classList.add('active');
+                document.getElementById('tiendaSection').classList.remove('active');
+                document.querySelector('.toggle-btn').textContent = 'Volver a Tienda';
+                displayProductsGestion();
+            } else {
+                alert('Contraseña incorrecta.');
+            }
+            document.getElementById('passwordInput').value = '';
+        }
+
+        function toggleView() {
+            const loginSection = document.getElementById('loginSection');
+            const gestionSection = document.getElementById('gestionSection');
+            const tiendaSection = document.getElementById('tiendaSection');
+            const toggleBtn = document.querySelector('.toggle-btn');
+
+            if (gestionSection.classList.contains('active') || loginSection.classList.contains('active')) {
+                loginSection.classList.remove('active');
+                gestionSection.classList.remove('active');
+                tiendaSection.classList.add('active');
+                toggleBtn.textContent = 'Ir a Gestión';
+            } else {
+                showLogin();
+            }
+        }
+
+        document.querySelector('.toggle-btn').addEventListener('click', toggleView);
+        displayProductsTienda();
+        renderizarCarrito();
+    </script>
+</body>
+</html>
