@@ -31,34 +31,15 @@
         color: white;
     }
 
-    .toggle-btn {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        background: #ff69b4;
-        color: white;
-        border: none;
-        padding: 0.6rem 1rem;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        z-index: 1003;
-    }
-
-    .toggle-btn:hover, .toggle-btn:active {
-        background: #e0559d;
-        transform: scale(1.05);
-    }
-
     .container {
         max-width: 100%;
         margin: 0 auto;
         padding: 1rem 0.5rem;
+        /* Para que no quede debajo de la gestión fija */
+        margin-left: 370px;
     }
 
-    /* Gestión fija en esquina superior izquierda */
+    /* Gestión fija en esquina superior izquierda (visible siempre) */
     .gestion-section {
         position: fixed;
         top: 1rem;
@@ -71,7 +52,7 @@
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         z-index: 1002;
-        display: none;
+        display: block;
     }
 
     .form-section input {
@@ -363,8 +344,6 @@
     <h1>Makeupkat</h1>
 </header>
 
-<button class="toggle-btn" id="toggleBtn">Gestionar Productos</button>
-
 <div class="container">
     <!-- Tienda -->
     <div class="tienda-section active" id="tiendaSection">
@@ -398,8 +377,6 @@
 </footer>
 
 <script>
-    const password = "fabiola123";
-
     let products = JSON.parse(localStorage.getItem("products")) || [
         { name: "Base Líquida", price: 120, image: "https://via.placeholder.com/200x150" },
         { name: "Labial Matte", price: 50, image: "https://via.placeholder.com/200x150" }
@@ -409,12 +386,8 @@
 
     const gestionSection = document.getElementById("gestionSection");
     const tiendaSection = document.getElementById("tiendaSection");
-    const toggleBtn = document.getElementById("toggleBtn");
     const addProductBtn = document.getElementById("addProductBtn");
     const finalizarBtn = document.getElementById("finalizarBtn");
-
-    // Ocultar gestión inicialmente
-    gestionSection.style.display = "none";
 
     // Mostrar productos en tienda
     function displayProductsTienda() {
@@ -551,27 +524,11 @@
         displayCarrito();
     }
 
-    // Manejo botón Gestión (pide contraseña)
-    toggleBtn.addEventListener("click", () => {
-        if (gestionSection.style.display === "block") {
-            gestionSection.style.display = "none";
-            toggleBtn.textContent = "Gestionar Productos";
-        } else {
-            const pass = prompt("Ingresa la contraseña para gestionar productos:");
-            if (pass === password) {
-                gestionSection.style.display = "block";
-                displayProductsGestion();
-                toggleBtn.textContent = "Cerrar Gestión";
-            } else {
-                alert("Contraseña incorrecta.");
-            }
-        }
-    });
-
     addProductBtn.addEventListener("click", addProduct);
     finalizarBtn.addEventListener("click", finalizarPedido);
 
-    // Mostrar tienda y carrito al cargar
+    // Mostrar tienda, gestión y carrito al cargar
+    displayProductsGestion();
     displayProductsTienda();
     displayCarrito();
 </script>
