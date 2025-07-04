@@ -1,177 +1,582 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Makeupkat</title>
-  <style>
-    body { font-family: sans-serif; margin: 0; background: #fff0f5; }
-    header { background: #ff69b4; color: white; padding: 1rem; text-align: center; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Makeupkat - Tienda y Gestión</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+        min-height: 100vh;
+    }
+
+    header {
+        background: linear-gradient(to right, #ff69b4, #ff85c0);
+        padding: 1rem;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+        color: white;
+    }
+
     .toggle-btn {
-      position: fixed; top: 1rem; left: 1rem;
-      background: #ff69b4; color: white; border: none; border-radius: 8px;
-      padding: 0.5rem 1rem; cursor: pointer; z-index: 1000;
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        background: #ff69b4;
+        color: white;
+        border: none;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        z-index: 1001;
     }
+
+    .toggle-btn:hover, .toggle-btn:active {
+        background: #e0559d;
+        transform: scale(1.05);
+    }
+
+    .container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 1rem 0.5rem;
+    }
+
+    .gestion-section {
+        display: none;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        max-width: 400px;
+        margin: 3rem auto 2rem;
+    }
+
+    .gestion-section.active {
+        display: block;
+    }
+
+    .form-section input {
+        width: 100%;
+        padding: 0.6rem;
+        margin: 0.5rem 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .form-section button {
+        width: 100%;
+        padding: 0.6rem;
+        background: #ff69b4;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .form-section button:hover, .form-section button:active {
+        background: #e0559d;
+        transform: scale(1.05);
+    }
+
+    .product-list {
+        margin-top: 1rem;
+    }
+
+    .product-item {
+        background: white;
+        padding: 1rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-item img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .product-item div {
+        flex-grow: 1;
+    }
+
+    .product-item h3 {
+        color: #333;
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .product-item p {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .product-item button {
+        background: #ff4444;
+        color: white;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .product-item button:hover, .product-item button:active {
+        background: #cc0000;
+        transform: scale(1.05);
+    }
+
     .productos {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem; padding: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        padding: 0.5rem;
     }
+
     .producto {
-      background: white; padding: 1rem; border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center;
+        background: white;
+        padding: 1rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    .producto img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
+
+    .producto:hover, .producto:active {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .producto img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+    }
+
+    .producto h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .producto p {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
     .producto button {
-      margin-top: 0.5rem; padding: 0.5rem 1rem; border: none; border-radius: 8px;
-      background: #ff69b4; color: white; cursor: pointer;
+        background: #ff69b4;
+        color: white;
+        border: none;
+        padding: 0.6rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
-    .gestion { display: none; padding: 1rem; background: #fff8fc; }
-    .gestion input, .gestion button {
-      display: block; width: 100%; margin: 0.5rem 0; padding: 0.5rem;
+
+    .producto button:hover, .producto button:active {
+        background: #e0559d;
+        transform: scale(1.05);
     }
+
+    /* Carrito fijo en esquina inferior derecha */
     .carrito {
-      position: fixed; bottom: 0; left: 0; right: 0; background: white;
-      padding: 1rem; box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      width: 280px;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 10px;
+      z-index: 1000;
     }
-  </style>
+
+    .carrito h2 {
+      margin-top: 0;
+      font-size: 1.3rem;
+      color: #ff69b4;
+      margin-bottom: 0.5rem;
+    }
+
+    .carrito ul {
+      max-height: 180px;
+      overflow-y: auto;
+      padding-left: 1rem;
+      margin-bottom: 0.5rem;
+      list-style: disc;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    .carrito li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .carrito button {
+      background: #ff4444;
+      border: none;
+      color: white;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .carrito button:hover {
+      background: #cc0000;
+    }
+
+    .carrito p {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    .carrito .finalizar-btn {
+      width: 100%;
+      padding: 0.6rem;
+      background: #ff69b4;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    .carrito .finalizar-btn:hover {
+      background: #e0559d;
+    }
+
+    footer {
+        background: #ff69b4;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 4rem;
+    }
+
+    footer p {
+        font-size: 0.9rem;
+    }
+
+    footer a {
+        color: #fff0f5;
+        text-decoration: none;
+        margin: 0 0.5rem;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (min-width: 601px) {
+        header h1 {
+            font-size: 2rem;
+        }
+
+        .container {
+            padding: 2rem 1rem;
+        }
+
+        .gestion-section {
+            max-width: 400px;
+            margin: 3rem auto 2rem;
+            padding: 2rem;
+        }
+
+        .form-section input, .form-section button {
+            padding: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .product-item img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .product-item h3 {
+            font-size: 1.2rem;
+        }
+
+        .product-item p, .product-item button {
+            font-size: 1rem;
+        }
+
+        .product-item button {
+            padding: 0.6rem 1.2rem;
+        }
+
+        .producto img {
+            height: 200px;
+        }
+
+        .producto h3 {
+            font-size: 1.3rem;
+        }
+
+        .producto p, .producto button {
+            font-size: 1rem;
+        }
+
+        .producto button {
+            padding: 0.8rem 1.5rem;
+        }
+    }
+</style>
 </head>
 <body>
 
-<header><h1>Makeupkat</h1></header>
-<button class="toggle-btn" onclick="mostrarGestion()">Gestión</button>
+<header>
+    <h1>Makeupkat</h1>
+</header>
 
-<div class="productos" id="productos"></div>
+<button class="toggle-btn" id="toggleBtn">Gestionar Productos</button>
 
-<div class="gestion" id="gestion">
-  <h2>Gestión de productos</h2>
-  <input type="text" id="nombre" placeholder="Nombre del producto">
-  <input type="number" id="precio" placeholder="Precio Q">
-  <input type="text" id="imagen" placeholder="URL de la imagen">
-  <button onclick="agregarProducto()">Agregar</button>
-  <div id="listaGestion"></div>
+<div class="container">
+    <!-- Gestión -->
+    <div class="gestion-section" id="gestionSection">
+        <h2>Gestión de Productos</h2>
+        <div class="form-section">
+            <input type="text" id="productName" placeholder="Nombre del producto" />
+            <input type="number" id="productPrice" placeholder="Precio (Q)" step="0.01" />
+            <input type="text" id="productImage" placeholder="URL de la imagen" />
+            <button id="addProductBtn">Agregar Producto</button>
+        </div>
+        <div class="product-list" id="productList"></div>
+    </div>
+
+    <!-- Tienda -->
+    <div class="tienda-section active" id="tiendaSection">
+        <div class="productos" id="productGrid"></div>
+    </div>
 </div>
 
-<div class="carrito">
-  <h3>Carrito</h3>
-  <ul id="carritoLista"></ul>
-  <p>Total: Q<span id="total">0.00</span></p>
-  <button onclick="finalizarPedido()">Finalizar pedido</button>
+<div class="carrito" id="carrito">
+    <h2>Carrito</h2>
+    <ul id="listaCarrito"></ul>
+    <p>Total: Q<span id="total">0.00</span></p>
+    <button class="finalizar-btn" id="finalizarBtn">Finalizar pedido</button>
 </div>
+
+<footer>
+    <p>© 2025 Makeupkat. Todos los derechos reservados.</p>
+    <p><a href="https://wa.me/50249080900" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
+</footer>
 
 <script>
-  const password = "fabiola123";
-  let productos = JSON.parse(localStorage.getItem("productos")) || [
-    { nombre: "Base Líquida", precio: 120, imagen: "https://via.placeholder.com/200x150" },
-    { nombre: "Labial Matte", precio: 50, imagen: "https://via.placeholder.com/200x150" }
-  ];
-  let carrito = [];
+    const password = "fabiola123";
 
-  function renderProductos() {
-    const contenedor = document.getElementById("productos");
-    contenedor.innerHTML = "";
-    productos.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "producto";
-      div.innerHTML = `
-        <img src="${p.imagen}">
-        <h3>${p.nombre}</h3>
-        <p>Q${p.precio.toFixed(2)}</p>
-        <button onclick="agregarAlCarrito('${p.nombre}', ${p.precio})">Agregar al carrito</button>
-      `;
-      contenedor.appendChild(div);
+    let products = JSON.parse(localStorage.getItem("products")) || [
+        { name: "Base Líquida", price: 120, image: "https://via.placeholder.com/200x150" },
+        { name: "Labial Matte", price: 50, image: "https://via.placeholder.com/200x150" }
+    ];
+
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    const gestionSection = document.getElementById("gestionSection");
+    const tiendaSection = document.getElementById("tiendaSection");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const addProductBtn = document.getElementById("addProductBtn");
+    const finalizarBtn = document.getElementById("finalizarBtn");
+
+    // Ocultar gestión inicialmente
+    gestionSection.style.display = "none";
+
+    // Mostrar productos en tienda
+    function displayProductsTienda() {
+        const productGrid = document.getElementById("productGrid");
+        productGrid.innerHTML = "";
+        products.forEach((product) => {
+            const producto = document.createElement("div");
+            producto.className = "producto";
+            producto.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" />
+                <h3>${product.name}</h3>
+                <p>Q${product.price.toFixed(2)}</p>
+                <button onclick="agregarAlCarrito('${product.name}', ${product.price})">Agregar al carrito</button>
+            `;
+            productGrid.appendChild(producto);
+        });
+        if (products.length === 0) {
+            productGrid.innerHTML = "<p>No hay productos disponibles.</p>";
+        }
+    }
+
+    // Mostrar productos en gestión con botón borrar
+    function displayProductsGestion() {
+        const productList = document.getElementById("productList");
+        productList.innerHTML = "";
+        products.forEach((product, index) => {
+            const productItem = document.createElement("div");
+            productItem.className = "product-item";
+            productItem.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" />
+                <div>
+                    <h3>${product.name}</h3>
+                    <p>Q${product.price.toFixed(2)}</p>
+                </div>
+                <button onclick="deleteProduct(${index})">Borrar</button>
+            `;
+            productList.appendChild(productItem);
+        });
+    }
+
+    function addProduct() {
+        const name = document.getElementById("productName").value.trim();
+        const price = parseFloat(document.getElementById("productPrice").value);
+        const image = document.getElementById("productImage").value.trim();
+
+        if (!name || isNaN(price) || price <= 0 || !image) {
+            alert("Por favor, completa todos los campos con datos válidos.");
+            return;
+        }
+
+        products.push({ name, price, image });
+        localStorage.setItem("products", JSON.stringify(products));
+        displayProductsGestion();
+        displayProductsTienda();
+
+        document.getElementById("productName").value = "";
+        document.getElementById("productPrice").value = "";
+        document.getElementById("productImage").value = "";
+    }
+
+    function deleteProduct(index) {
+        if (confirm(`¿Seguro que quieres borrar "${products[index].name}"?`)) {
+            const productName = products[index].name;
+            products.splice(index, 1);
+            localStorage.setItem("products", JSON.stringify(products));
+            displayProductsGestion();
+            displayProductsTienda();
+
+            // Eliminar del carrito si estaba
+            carrito = carrito.filter(item => item.name !== productName);
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            displayCarrito();
+        }
+    }
+
+    function agregarAlCarrito(name, price) {
+        const productoExistente = carrito.find(item => item.name === name);
+        if (productoExistente) {
+            productoExistente.cantidad += 1;
+        } else {
+            carrito.push({ name, price, cantidad: 1 });
+        }
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        displayCarrito();
+    }
+
+    function displayCarrito() {
+        const listaCarrito = document.getElementById("listaCarrito");
+        const totalSpan = document.getElementById("total");
+        listaCarrito.innerHTML = "";
+
+        let total = 0;
+
+        carrito.forEach((item, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                ${item.name} - Q${item.price.toFixed(2)} x ${item.cantidad}
+                <button onclick="eliminarDelCarrito(${index})">X</button>
+            `;
+            listaCarrito.appendChild(li);
+            total += item.price * item.cantidad;
+        });
+
+        totalSpan.textContent = total.toFixed(2);
+    }
+
+    function eliminarDelCarrito(index) {
+        carrito.splice(index, 1);
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        displayCarrito();
+    }
+
+    function finalizarPedido() {
+        if (carrito.length === 0) {
+            alert("El carrito está vacío.");
+            return;
+        }
+
+        let mensaje = "¡Hola! Quiero hacer este pedido:%0A";
+        carrito.forEach(item => {
+            mensaje += `- ${item.name} x${item.cantidad}%0A`;
+        });
+
+        let total = carrito.reduce((acc, item) => acc + item.price * item.cantidad, 0);
+        mensaje += `%0ATotal: Q${total.toFixed(2)}`;
+
+        const telefono = "50249080900";
+        const url = `https://wa.me/${telefono}?text=${mensaje}`;
+
+        window.open(url, "_blank");
+
+        carrito = [];
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+        displayCarrito();
+    }
+
+    // Manejo botón gestión con contraseña
+    toggleBtn.addEventListener("click", () => {
+        if (gestionSection.style.display === "block") {
+            gestionSection.style.display = "none";
+            toggleBtn.textContent = "Gestionar Productos";
+        } else {
+            const inputPass = prompt("Ingresa la contraseña para gestión:");
+            if (inputPass === password) {
+                gestionSection.style.display = "block";
+                displayProductsGestion();
+                toggleBtn.textContent = "Cerrar Gestión";
+            } else {
+                alert("Contraseña incorrecta.");
+            }
+        }
     });
-  }
 
-  function agregarAlCarrito(nombre, precio) {
-    const existente = carrito.find(p => p.nombre === nombre);
-    if (existente) {
-      existente.cantidad++;
-    } else {
-      carrito.push({ nombre, precio, cantidad: 1 });
-    }
-    renderCarrito();
-  }
+    addProductBtn.addEventListener("click", addProduct);
+    finalizarBtn.addEventListener("click", finalizarPedido);
 
-  function renderCarrito() {
-    const lista = document.getElementById("carritoLista");
-    lista.innerHTML = "";
-    let total = 0;
-    carrito.forEach((p, i) => {
-      total += p.precio * p.cantidad;
-      const li = document.createElement("li");
-      li.innerHTML = `${p.nombre} x${p.cantidad} - Q${p.precio * p.cantidad}
-        <button onclick="quitarDelCarrito(${i})">X</button>`;
-      lista.appendChild(li);
-    });
-    document.getElementById("total").textContent = total.toFixed(2);
-  }
-
-  function quitarDelCarrito(i) {
-    carrito.splice(i, 1);
-    renderCarrito();
-  }
-
-  function finalizarPedido() {
-    if (carrito.length === 0) {
-      alert("El carrito está vacío.");
-      return;
-    }
-    let mensaje = "Hola! Quiero hacer este pedido:%0A";
-    carrito.forEach(p => mensaje += `- ${p.nombre} x${p.cantidad}%0A`);
-    let total = carrito.reduce((sum, p) => sum + p.precio * p.cantidad, 0);
-    mensaje += `%0ATotal: Q${total.toFixed(2)}`;
-    window.open(`https://wa.me/50249080900?text=${mensaje}`, "_blank");
-    carrito = [];
-    renderCarrito();
-  }
-
-  function mostrarGestion() {
-    const pass = prompt("Contraseña:");
-    if (pass === password) {
-      document.getElementById("gestion").style.display = "block";
-      renderGestion();
-    } else {
-      alert("Contraseña incorrecta.");
-    }
-  }
-
-  function agregarProducto() {
-    const nombre = document.getElementById("nombre").value.trim();
-    const precio = parseFloat(document.getElementById("precio").value);
-    const imagen = document.getElementById("imagen").value.trim();
-    if (!nombre || isNaN(precio) || !imagen) return alert("Campos inválidos");
-    productos.push({ nombre, precio, imagen });
-    localStorage.setItem("productos", JSON.stringify(productos));
-    renderProductos();
-    renderGestion();
-    document.getElementById("nombre").value = "";
-    document.getElementById("precio").value = "";
-    document.getElementById("imagen").value = "";
-  }
-
-  function renderGestion() {
-    const lista = document.getElementById("listaGestion");
-    lista.innerHTML = "";
-    productos.forEach((p, i) => {
-      const div = document.createElement("div");
-      div.innerHTML = `${p.nombre} - Q${p.precio} <button onclick="borrarProducto(${i})">Borrar</button>`;
-      lista.appendChild(div);
-    });
-  }
-
-  function borrarProducto(i) {
-    if (confirm(`¿Borrar "${productos[i].nombre}"?`)) {
-      productos.splice(i, 1);
-      localStorage.setItem("productos", JSON.stringify(productos));
-      renderProductos();
-      renderGestion();
-    }
-  }
-
-  renderProductos();
+    // Mostrar tienda y carrito al cargar
+    displayProductsTienda();
+    displayCarrito();
 </script>
 
 </body>
 </html>
-
 
