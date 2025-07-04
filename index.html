@@ -6,7 +6,6 @@
 <title>Makeupkat - Tienda y Gestión</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
 <style>
-    /* --- ESTILOS GENERALES --- */
     * {
         margin: 0;
         padding: 0;
@@ -17,6 +16,7 @@
     body {
         background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
         min-height: 100vh;
+        padding-bottom: 60px; /* espacio para carrito */
     }
 
     header {
@@ -31,37 +31,51 @@
         color: white;
     }
 
-    .toggle-btn {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
+    .login-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        max-width: 400px;
+        margin: 3rem auto;
+        text-align: center;
+    }
+
+    .login-section h2 {
+        font-size: 1.3rem;
+        color: #ff69b4;
+        margin-bottom: 1rem;
+    }
+
+    .login-section input {
+        width: 100%;
+        padding: 0.8rem;
+        margin: 0.5rem 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    .login-section button {
+        width: 100%;
+        padding: 0.8rem;
         background: #ff69b4;
         color: white;
         border: none;
-        padding: 0.6rem 1rem;
         border-radius: 8px;
         cursor: pointer;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        font-size: 1rem;
         transition: background-color 0.3s ease, transform 0.2s ease;
-        z-index: 1003;
     }
 
-    .toggle-btn:hover, .toggle-btn:active {
+    .login-section button:hover, .login-section button:active {
         background: #e0559d;
         transform: scale(1.05);
     }
 
-    .container {
-        max-width: 100%;
-        margin: 0 auto;
-        padding: 1rem 0.5rem;
-    }
-
-    /* Gestión fija en esquina superior izquierda */
     .gestion-section {
         position: fixed;
-        top: 1rem;
+        bottom: 1rem;
         left: 1rem;
         width: 350px;
         max-height: 90vh;
@@ -74,24 +88,28 @@
         display: none;
     }
 
+    .form-section {
+        margin-bottom: 1rem;
+    }
+
     .form-section input {
         width: 100%;
-        padding: 0.6rem;
-        margin: 0.5rem 0;
+        padding: 0.8rem;
+        margin: 0.4rem 0;
         border: 1px solid #ddd;
         border-radius: 8px;
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
 
     .form-section button {
         width: 100%;
-        padding: 0.6rem;
+        padding: 0.8rem;
         background: #ff69b4;
         color: white;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        font-size: 0.9rem;
+        font-size: 1rem;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
@@ -101,7 +119,8 @@
     }
 
     .product-list {
-        margin-top: 1rem;
+        max-height: 350px;
+        overflow-y: auto;
     }
 
     .product-item {
@@ -129,7 +148,6 @@
     .product-item h3 {
         color: #333;
         font-size: 1.1rem;
-        margin-bottom: 0.3rem;
     }
 
     .product-item p {
@@ -141,7 +159,7 @@
         background: #ff4444;
         color: white;
         border: none;
-        padding: 0.4rem 0.8rem;
+        padding: 0.5rem 1rem;
         border-radius: 8px;
         cursor: pointer;
         font-size: 0.9rem;
@@ -153,12 +171,13 @@
         transform: scale(1.05);
     }
 
-    /* TIENDA */
     .productos {
+        max-width: 1000px;
+        margin: 2rem auto 5rem auto;
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-        padding: 0.5rem;
+        gap: 1.5rem;
+        padding: 0 1rem;
     }
 
     .producto {
@@ -211,79 +230,81 @@
         transform: scale(1.05);
     }
 
-    /* CARRITO fijo en esquina inferior derecha */
     .carrito {
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      width: 280px;
-      background: white;
-      padding: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      border-radius: 10px;
-      z-index: 1000;
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        width: 300px;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border: 1px solid #ddd;
+        padding: 1rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        z-index: 1003;
     }
 
     .carrito h2 {
-      margin-top: 0;
-      font-size: 1.3rem;
-      color: #ff69b4;
-      margin-bottom: 0.5rem;
+        font-size: 1.3rem;
+        color: #ff69b4;
+        margin-bottom: 0.5rem;
     }
 
     .carrito ul {
-      max-height: 180px;
-      overflow-y: auto;
-      padding-left: 1rem;
-      margin-bottom: 0.5rem;
-      list-style: disc;
-      color: #333;
-      font-size: 0.9rem;
+        list-style: none;
+        padding: 0;
+        margin-bottom: 0.5rem;
+        max-height: 250px;
+        overflow-y: auto;
     }
 
     .carrito li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.3rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .carrito button {
-      background: #ff4444;
-      border: none;
-      color: white;
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: background-color 0.3s ease;
+        background: #ff4444;
+        color: white;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .carrito button:hover {
-      background: #cc0000;
+    .carrito button:hover, .carrito button:active {
+        background: #cc0000;
+        transform: scale(1.05);
     }
 
     .carrito p {
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-      color: #333;
+        font-size: 1rem;
+        color: #333;
+        margin-bottom: 0.5rem;
     }
 
     .carrito .finalizar-btn {
-      width: 100%;
-      padding: 0.6rem;
-      background: #ff69b4;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      color: white;
-      transition: background-color 0.3s ease;
+        width: 100%;
+        padding: 0.6rem;
+        background: #ff69b4;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .carrito .finalizar-btn:hover {
-      background: #e0559d;
+    .carrito .finalizar-btn:hover, .carrito .finalizar-btn:active {
+        background: #e0559d;
+        transform: scale(1.05);
     }
 
     footer {
@@ -291,7 +312,7 @@
         color: white;
         text-align: center;
         padding: 1rem;
-        margin-top: 4rem;
+        margin-top: 2rem;
     }
 
     footer p {
@@ -308,71 +329,40 @@
         text-decoration: underline;
     }
 
-    @media (min-width: 601px) {
-        header h1 {
-            font-size: 2rem;
+    @media (max-width: 900px) {
+        .gestion-section {
+            width: 90%;
+            left: 5%;
+            bottom: 70px;
+            max-height: 40vh;
         }
 
-        .container {
-            padding: 2rem 1rem;
+        .carrito {
+            width: 90%;
+            right: 5%;
+            bottom: 5rem;
+            max-height: 40vh;
         }
 
-        .form-section input, .form-section button {
-            padding: 0.8rem;
-            font-size: 1rem;
-        }
-
-        .product-item img {
-            width: 100px;
-            height: 100px;
-        }
-
-        .product-item h3 {
-            font-size: 1.2rem;
-        }
-
-        .product-item p, .product-item button {
-            font-size: 1rem;
-        }
-
-        .product-item button {
-            padding: 0.6rem 1.2rem;
-        }
-
-        .producto img {
-            height: 200px;
-        }
-
-        .producto h3 {
-            font-size: 1.3rem;
-        }
-
-        .producto p, .producto button {
-            font-size: 1rem;
-        }
-
-        .producto button {
-            padding: 0.8rem 1.5rem;
+        .productos {
+            margin: 2rem 1rem 7rem 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         }
     }
 </style>
 </head>
 <body>
-
 <header>
     <h1>Makeupkat</h1>
 </header>
 
-<button class="toggle-btn" id="toggleBtn">Gestionar Productos</button>
-
-<div class="container">
-    <!-- Tienda -->
-    <div class="tienda-section active" id="tiendaSection">
-        <div class="productos" id="productGrid"></div>
-    </div>
+<div class="login-section" id="loginSection">
+    <h2>Iniciar Sesión</h2>
+    <input type="password" id="passwordInput" placeholder="Contraseña" />
+    <button id="loginBtn">Ingresar</button>
 </div>
 
-<!-- Gestión fija esquina superior izquierda -->
+<!-- Gestión de productos -->
 <div class="gestion-section" id="gestionSection">
     <h2>Gestión de Productos</h2>
     <div class="form-section">
@@ -384,7 +374,10 @@
     <div class="product-list" id="productList"></div>
 </div>
 
-<!-- Carrito fijo en esquina inferior derecha -->
+<!-- Tienda -->
+<div class="productos" id="productGrid"></div>
+
+<!-- Carrito -->
 <div class="carrito" id="carrito">
     <h2>Carrito</h2>
     <ul id="listaCarrito"></ul>
@@ -394,7 +387,7 @@
 
 <footer>
     <p>© 2025 Makeupkat. Todos los derechos reservados.</p>
-    <p><a href="https://wa.me/50249080900" target="_blank" rel="noopener noreferrer">WhatsApp</a></p>
+    <p><a href="https://wa.me/50249080900" target="_blank">WhatsApp</a></p>
 </footer>
 
 <script>
@@ -407,18 +400,34 @@
 
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+    const loginSection = document.getElementById("loginSection");
     const gestionSection = document.getElementById("gestionSection");
-    const tiendaSection = document.getElementById("tiendaSection");
-    const toggleBtn = document.getElementById("toggleBtn");
+    const productList = document.getElementById("productList");
+    const productGrid = document.getElementById("productGrid");
+    const listaCarrito = document.getElementById("listaCarrito");
+    const totalSpan = document.getElementById("total");
+    const loginBtn = document.getElementById("loginBtn");
     const addProductBtn = document.getElementById("addProductBtn");
     const finalizarBtn = document.getElementById("finalizarBtn");
 
-    // Ocultar gestión inicialmente
-    gestionSection.style.display = "none";
+    function displayProductsGestion() {
+        productList.innerHTML = "";
+        products.forEach((product, index) => {
+            const productItem = document.createElement("div");
+            productItem.className = "product-item";
+            productItem.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" />
+                <div>
+                    <h3>${product.name}</h3>
+                    <p>Q${product.price.toFixed(2)}</p>
+                </div>
+                <button onclick="deleteProduct(${index})">Borrar</button>
+            `;
+            productList.appendChild(productItem);
+        });
+    }
 
-    // Mostrar productos en tienda
     function displayProductsTienda() {
-        const productGrid = document.getElementById("productGrid");
         productGrid.innerHTML = "";
         products.forEach((product) => {
             const producto = document.createElement("div");
@@ -434,25 +443,6 @@
         if (products.length === 0) {
             productGrid.innerHTML = "<p>No hay productos disponibles.</p>";
         }
-    }
-
-    // Mostrar productos en gestión con botón borrar
-    function displayProductsGestion() {
-        const productList = document.getElementById("productList");
-        productList.innerHTML = "";
-        products.forEach((product, index) => {
-            const productItem = document.createElement("div");
-            productItem.className = "product-item";
-            productItem.innerHTML = `
-                <img src="${product.image}" alt="${product.name}" />
-                <div>
-                    <h3>${product.name}</h3>
-                    <p>Q${product.price.toFixed(2)}</p>
-                </div>
-                <button onclick="deleteProduct(${index})">Borrar</button>
-            `;
-            productList.appendChild(productItem);
-        });
     }
 
     function addProduct() {
@@ -483,7 +473,6 @@
             displayProductsGestion();
             displayProductsTienda();
 
-            // Eliminar del carrito si estaba
             carrito = carrito.filter(item => item.name !== productName);
             localStorage.setItem("carrito", JSON.stringify(carrito));
             displayCarrito();
@@ -502,10 +491,7 @@
     }
 
     function displayCarrito() {
-        const listaCarrito = document.getElementById("listaCarrito");
-        const totalSpan = document.getElementById("total");
         listaCarrito.innerHTML = "";
-
         let total = 0;
 
         carrito.forEach((item, index) => {
@@ -551,31 +537,40 @@
         displayCarrito();
     }
 
-    // Manejo botón Gestión (pide contraseña)
-    toggleBtn.addEventListener("click", () => {
-        if (gestionSection.style.display === "block") {
-            gestionSection.style.display = "none";
-            toggleBtn.textContent = "Gestionar Productos";
+    loginBtn.addEventListener("click", () => {
+        const inputPass = document.getElementById("passwordInput").value;
+        if (inputPass === password) {
+            loginSection.style.display = "none";
+            gestionSection.style.display = "block";
+            displayProductsGestion();
+            displayProductsTienda();
+            displayCarrito();
         } else {
-            const pass = prompt("Ingresa la contraseña para gestionar productos:");
-            if (pass === password) {
-                gestionSection.style.display = "block";
-                displayProductsGestion();
-                toggleBtn.textContent = "Cerrar Gestión";
-            } else {
-                alert("Contraseña incorrecta.");
-            }
+            alert("Contraseña incorrecta.");
         }
     });
 
     addProductBtn.addEventListener("click", addProduct);
     finalizarBtn.addEventListener("click", finalizarPedido);
 
-    // Mostrar tienda y carrito al cargar
+    // Mostrar tienda y carrito siempre visibles después login
+    // y ocultar login al inicio
+    // Puedes quitar este bloque si prefieres mostrar login cada vez
+    /*
+    if(localStorage.getItem("loggedIn") === "true") {
+        loginSection.style.display = "none";
+        gestionSection.style.display = "block";
+        displayProductsGestion();
+        displayProductsTienda();
+        displayCarrito();
+    }
+    */
+
+    // Mostrar solo productos y carrito antes de login, pero sin gestión:
     displayProductsTienda();
     displayCarrito();
-</script>
 
+</script>
 </body>
 </html>
 
