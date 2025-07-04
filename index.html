@@ -378,7 +378,7 @@
     <div class="form-section">
         <input type="text" id="productName" placeholder="Nombre del producto" />
         <input type="number" id="productPrice" placeholder="Precio (Q)" step="0.01" />
-        <input type="text" id="productImage" placeholder="URL de la imagen" />
+        <input type="text" id="productImage" placeholder="URL de la imagen (Google Drive o directa)" />
         <button id="addProductBtn">Agregar Producto</button>
     </div>
     <div class="product-list" id="productList"></div>
@@ -413,6 +413,16 @@
 
     // Ocultar gestión inicialmente
     gestionSection.style.display = "none";
+
+    // Función para transformar URLs de Google Drive
+    function transformGoogleDriveUrl(url) {
+        const drivePattern = /drive\.google\.com\/file\/d\/([^\/]+)\/view/;
+        const match = url.match(drivePattern);
+        if (match && match[1]) {
+            return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        }
+        return url; // Retorna la URL original si no es de Google Drive
+    }
 
     // Mostrar productos en tienda
     function displayProductsTienda() {
@@ -456,12 +466,21 @@
     function addProduct() {
         const name = document.getElementById("productName").value.trim();
         const price = parseFloat(document.getElementById("productPrice").value);
-        const image = document.getElementById("productImage").value.trim();
+        let image = document.getElementById("productImage").value.trim();
 
         if (!name || isNaN(price) || price <= 0 || !image) {
             alert("Por favor, completa todos los campos con datos válidos.");
             return;
         }
+
+        // Validar que la URL comience con http:// o https://
+        if (!image.startsWith("http://") && !image.startsWith("https://")) {
+            alert("La URL de la imagen debe comenzar con http:// o https://");
+            return;
+        }
+
+        // Transformar URL de Google Drive si es necesario
+        image = transformGoogleDriveUrl(image);
 
         products.push({ name, price, image });
         localStorage.setItem("products", JSON.stringify(products));
