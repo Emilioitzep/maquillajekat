@@ -3,177 +3,427 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makeupkat - Tienda de Maquillaje</title>
+    <title>Makeupkat - Tienda y Gestión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #fff0f5;
-            color: #333;
-            text-align: center;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
         }
+
+        body {
+            background: linear-gradient(to bottom, #fff0f5, #ffe6f0);
+            min-height: 100vh;
+        }
+
         header {
-            background-color: #ff85a2;
-            color: white;
-            padding: 1rem;
+            background: linear-gradient(to right, #ff69b4, #ff85c0);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        header img.logo {
+
+        header img {
             max-width: 150px;
             height: auto;
             margin-bottom: 0.5rem;
         }
+
         header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-        }
-        .hero {
-            padding: 2rem;
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1522335786673-4a5d3a0e6d2e');
-            background-size: cover;
-            background-position: center;
+            font-size: 2rem;
             color: white;
         }
-        .hero h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .hero .whatsapp-button {
-            background-color: #25D366;
+
+        .toggle-btn {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background: #ff69b4;
             color: white;
+            border: none;
             padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1rem;
-            display: inline-block;
-            margin: 1rem 0;
-            transition: background-color 0.3s;
-        }
-        .hero .whatsapp-button:hover {
-            background-color: #20b354;
-        }
-        .products {
-            padding: 1rem;
-        }
-        .products h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #ff85a2;
-        }
-        .product-card {
-            background-color: white;
             border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem auto;
-            width: 90%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
-        .product-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
+
+        .toggle-btn:hover, .toggle-btn:active {
+            background: #e0559d;
+            transform: scale(1.05);
         }
-        .product-card h3 {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
-        .product-card p {
-            font-size: 0.9rem;
-            color: #666;
+
+        .login-section, .gestion-section, .tienda-section {
+            display: none;
+        }
+
+        .login-section.active, .gestion-section.active, .tienda-section.active {
+            display: block;
+        }
+
+        /* Estilos para Login */
+        .login-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 3rem auto;
+            text-align: center;
+        }
+
+        .login-section h2 {
+            font-size: 1.5rem;
+            color: #ff69b4;
             margin-bottom: 1rem;
         }
-        .product-card .whatsapp-button {
-            background-color: #25D366;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            text-decoration: none;
+
+        .login-section input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             font-size: 1rem;
-            transition: background-color 0.3s;
         }
-        .product-card .whatsapp-button:hover {
-            background-color: #20b354;
-        }
-        footer {
-            background-color: #ff85a2;
+
+        .login-section button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #ff69b4;
             color: white;
-            padding: 1rem;
-            font-size: 0.9rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
-        @media (min-width: 768px) {
-            .product-card {
-                width: 80%;
+
+        .login-section button:hover, .login-section button:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        /* Estilos para Gestión */
+        .form-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-section button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-section button:hover, .form-section button:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .product-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .product-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product-item div {
+            flex-grow: 1;
+        }
+
+        .product-item h3 {
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .product-item p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .product-item button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .product-item button:hover, .product-item button:active {
+            background: #cc0000;
+            transform: scale(1.05);
+        }
+
+        /* Estilos para Tienda */
+        .productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .producto {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .producto:hover, .producto:active {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .producto img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .producto h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .producto p {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .producto button {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .producto button:hover, .producto button:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        .carrito {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            max-width: 300px;
+        }
+
+        .carrito h2 {
+            font-size: 1.5rem;
+            color: #ff69b4;
+            margin-bottom: 1rem;
+        }
+
+        .carrito ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .carrito li {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .carrito p {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .carrito button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .carrito button:hover, .carrito button:active {
+            background: #e0559d;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: #ff69b4;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+
+        footer a {
+            color: #fff0f5;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
             }
-            header img.logo {
-                max-width: 200px;
+
+            header img {
+                max-width: 120px;
+            }
+
+            .container {
+                padding: 1rem 0.5rem;
+            }
+
+            .login-section {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .product-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .product-item img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .productos {
+                grid-template-columns: 1fr;
+            }
+
+            .producto img {
+                height: 150px;
+            }
+
+            .carrito {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                max-width: 100%;
+                border-radius: 0;
+                box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <img src="img/logo1.jpg" alt="Makeupkat Logo" class="logo">
+        <img src="URL_DEL_LOGO_AQUÍ" alt="Makeupkat Logo">
         <h1>Makeupkat</h1>
     </header>
-    <section class="hero">
-        <h2>¡Encuentra tu maquillaje ideal!</h2>
-        <p>Explora nuestros productos y ordena fácilmente por WhatsApp.</p>
-        <a href="https://wa.me/+50249080900?text=¡Hola! Quiero más información sobre los productos de Makeupkat." class="whatsapp-button" target="_blank">Explorar Productos</a>
-    </section>
-    <section class="products">
-        <h2>Nuestros Productos</h2>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1522335786673-4a5d3a0e6d2e" alt="Bálsamos Dupe de Dior en Barra">
-            <h3>Bálsamos Dupe de Dior en Barra</h3>
-            <p>Inspirados en el icónico Dior Lip Glow, estos bálsamos en barra ofrecen una hidratación profunda y un toque de color natural que realza el tono de tus labios. Formulados con ingredientes nutritivos como manteca de karité y aceites naturales, proporcionan suavidad y protección contra la resequedad.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar los Bálsamos Dupe de Dior en Barra." class="whatsapp-button" target="_blank">Ordenar</a>
+
+    <button class="toggle-btn" onclick="showLogin()">Ir a Gestión</button>
+
+    <div class="container">
+        <!-- Sección de Login -->
+        <div class="login-section" id="loginSection">
+            <h2>Iniciar Sesión</h2>
+            <input type="password" id="passwordInput" placeholder="Contraseña">
+            <button onclick="checkPassword()">Ingresar</button>
         </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1512496015850-c4f373a4f8e5" alt="Brillo Mágico de Fresita">
-            <h3>Brillo Mágico de Fresita</h3>
-            <p>El Brillo Mágico de Fresita es un labial cremoso con un delicioso aroma y sabor a fresa que aporta un brillo encantador. Su fórmula ligera y no pegajosa hidrata los labios mientras les da un tono rosado suave y natural.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar el Brillo Mágico de Fresita." class="whatsapp-button" target="_blank">Ordenar</a>
+
+        <!-- Sección de Gestión -->
+        <div class="gestion-section" id="gestionSection">
+            <h2>Gestión de Productos</h2>
+            <div class="form-section">
+                <input type="text" id="productName" placeholder="Nombre del producto">
+                <input type="number" id="productPrice" placeholder="Precio (Q)" step="0.01">
+                <input type="text" id="productImage" placeholder="URL de la imagen">
+                <button onclick="addProduct()">Agregar Producto</button>
+            </div>
+            <div class="product-list" id="productList"></div>
         </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1522098605473-4ea11c27d8a6" alt="Bálsamo Hidratante de Fresita">
-            <h3>Bálsamo Hidratante de Fresita</h3>
-            <p>Este bálsamo labial con esencia de fresa combina hidratación intensiva con un delicado toque de color. Enriquecido con extractos de plantas y aceites naturales, previene el agrietamiento y mantiene los labios suaves y tersos durante todo el día.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar el Bálsamo Hidratante de Fresita." class="whatsapp-button" target="_blank">Ordenar</a>
+
+        <!-- Sección de Tienda -->
+        <div class="tienda-section active" id="tiendaSection">
+            <div class="productos" id="productGrid"></div>
         </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1522335786673-4a5d3a0e6d2e" alt="Bálsamo Hidratante de Doble Fresita">
-            <h3>Bálsamo Hidratante de Doble Fresita</h3>
-            <p>El Bálsamo Hidratante de Doble Fresita ofrece el doble de hidratación y estilo en un solo producto. Con una fórmula enriquecida con manteca de karité y aceite de almendras, este bálsamo nutre profundamente los labios mientras los cubre con un brillo rosado.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar el Bálsamo Hidratante de Doble Fresita." class="whatsapp-button" target="_blank">Ordenar</a>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1512496015850-c4f373a4f8e5" alt="Bálsamo Hidratante de Vaselina (Rojo)">
-            <h3>Bálsamo Hidratante de Vaselina (Rojo)</h3>
-            <p>Este bálsamo labial de vaselina en tono rojo ofrece una hidratación duradera con un toque de color vibrante. Su fórmula clásica de vaselina protege los labios contra las agresiones externas, como el frío o el viento, mientras les da un acabado brillante.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar el Bálsamo Hidratante de Vaselina (Rojo)." class="whatsapp-button" target="_blank">Ordenar</a>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1522098605473-4ea11c27d8a6" alt="Bálsamo Hidratante de Vaselina (Azul)">
-            <h3>Bálsamo Hidratante de Vaselina (Azul)</h3>
-            <p>El Bálsamo Hidratante de Vaselina en tono azul combina la protección icónica de la vaselina con un sutil efecto refrescante. Su fórmula humectante mantiene los labios suaves y protegidos, mientras que su ligero tono azulado aporta un brillo único.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar el Bálsamo Hidratante de Vaselina (Azul)." class="whatsapp-button" target="_blank">Ordenar</a>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1522335786673-4a5d3a0e6d2e" alt="Bálsamo Hidratante de Vaselina (Café)">
-            <h3>Bálsamo Hidratante de Vaselina (Café)</h3>
-            <p>Con un cálido tono café, este bálsamo de vaselina hidrata profundamente y protege los labios mientras les da un acabado sofisticado y natural. Su fórmula enriquecida con ingredientes humectantes previene la resequedad y el agrietamiento.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar el Bálsamo Hidratante de Vaselina (Café)." class="whatsapp-button" target="_blank">Ordenar</a>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-152209860Occurrence: 1
-5473-4ea11c27d8a6" alt="Antifaz de Animales">
-            <h3>Antifaz de Animales</h3>
-            <p>Los antifaces de animales son el accesorio perfecto para añadir diversión y estilo a cualquier ocasión. Disponibles en diseños adorables inspirados en animales, estos antifaces son ideales para fiestas, sesiones de fotos o simplemente para relajarte.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar el Antifaz de Animales." class="whatsapp-button" target="_blank">Ordenar</a>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1512496015850-c4f373a4f8e5" alt="Mascarillas para el Rostro">
-            <h3>Mascarillas para el Rostro</h3>
-            <p>Nuestras mascarillas faciales están diseñadas para hidratar, nutrir y revitalizar la piel. Formuladas con ingredientes naturales como extractos de frutas, ácido hialurónico y antioxidantes, ofrecen una experiencia de spa en casa.</p>
-            <a href="https://wa.me/+50249080900?text=¡Hola! Quiero ordenar las Mascarillas para el Rostro." class="whatsapp-button" target="_blank">Ordenar</a>
-            
+    </div>
+
+    <div class="carrito" id="carrito">
+        <h2>Carrito</h2>
+        <ul id="listaCarrito"></ul>
+        <p>Total: Q<span id="total">0</span></p>
+        <button onclick="finalizarPedido()">Finalizar pedido</button>
+    </div>
+
+    <footer>
+        <p>© 2025 Makeupkat. Todos los derechos reservados.</p>
+        <p><a href="https://wa.me/50249080900"
